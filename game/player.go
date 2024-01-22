@@ -1,7 +1,6 @@
 package game
 
 import (
-	"fmt"
 	"game/assets"
 	"math"
 
@@ -11,12 +10,13 @@ import (
 const bulletSpawnOffset = 50.0
 
 type Player struct {
+	game     *Game
 	position Vector
 	sprite   *ebiten.Image
 	rotate   float64
 }
 
-func newPlayer() *Player {
+func newPlayer(game *Game) *Player {
 	sprite := assets.PlayerSprite
 
 	bounds := sprite.Bounds()
@@ -31,6 +31,7 @@ func newPlayer() *Player {
 	return &Player{
 		position: pos,
 		sprite:   sprite,
+		game:     game,
 	}
 }
 
@@ -56,7 +57,7 @@ func (p *Player) Update() {
 		}
 
 		bullet := NewBullet(spawnPos, p.rotate)
-		fmt.Println(bullet)
+		p.game.AddBullet(bullet)
 	}
 }
 
@@ -74,4 +75,15 @@ func (p *Player) Draw(screen *ebiten.Image) {
 	op.GeoM.Translate(p.position.X, p.position.Y)
 
 	screen.DrawImage(p.sprite, op)
+}
+
+func (p *Player) Collider() Rect {
+	bounds := p.sprite.Bounds()
+
+	return NewReact(
+		p.position.X,
+		p.position.Y,
+		float64(bounds.Dx()),
+		float64(bounds.Dy()),
+	)
 }

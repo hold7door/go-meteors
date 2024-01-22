@@ -9,6 +9,7 @@ import (
 
 func main() {
 
+	// Initialize the game
 	g := game.NewGame()
 
 	err := ebiten.RunGame(g)

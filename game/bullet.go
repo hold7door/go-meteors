@@ -38,7 +38,7 @@ func (b *Bullet) Update() {
 	speed := bulletSpeedPerSecond / float64(ebiten.TPS())
 
 	b.position.X += math.Sin(b.rotation) * speed
-	b.position.Y += math.Cos(b.rotation) * speed
+	b.position.Y += math.Cos(b.rotation) * -speed
 }
 
 func (b *Bullet) Draw(screen *ebiten.Image) {
@@ -55,4 +55,15 @@ func (b *Bullet) Draw(screen *ebiten.Image) {
 	op.GeoM.Translate(b.position.X, b.position.Y)
 
 	screen.DrawImage(b.sprite, op)
+}
+
+func (b *Bullet) Collider() Rect {
+	bounds := b.sprite.Bounds()
+
+	return NewReact(
+		b.position.X,
+		b.position.Y,
+		float64(bounds.Dx()),
+		float64(bounds.Dy()),
+	)
 }
