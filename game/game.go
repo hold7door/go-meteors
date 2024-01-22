@@ -62,8 +62,6 @@ func (g *Game) Update() error {
 	}
 
 	return nil
-
-	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
