@@ -42,6 +42,8 @@ func (g *Game) Update() error {
 		b.Update()
 	}
 
+	// TODO: Understand this
+
 	// Check for meteor/bullet collisions
 	for i, m := range g.meteors {
 		for j, b := range g.bullets {
