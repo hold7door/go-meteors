@@ -1,9 +1,13 @@
 package game
 
 import (
+	"fmt"
+	"game/assets"
+	"image/color"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/text"
 )
 
 const (
@@ -48,8 +52,15 @@ func (g *Game) Update() error {
 	for i, m := range g.meteors {
 		for j, b := range g.bullets {
 			if m.Collider().Intersects(b.Collider()) {
-				g.meteors = append(g.meteors[:i], g.meteors[i+1:]...)
-				g.bullets = append(g.bullets[:j], g.bullets[j+1:]...)
+				updatedMeteors := g.meteors[:i]
+				updatedBullets := g.bullets[:j]
+
+				if i+1 < len(g.meteors) {
+					g.meteors = append(updatedMeteors, g.meteors[i+1:]...)
+				}
+				if j+1 < len(g.bullets) {
+					g.bullets = append(updatedBullets, g.bullets[j+1:]...)
+				}
 				g.score++
 			}
 		}
@@ -76,6 +87,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	for _, b := range g.bullets {
 		b.Draw(screen)
 	}
+
+	text.Draw(screen, fmt.Sprintf("%06d", g.score), assets.ScoreFont, ScreenWidth/2-100, 50, color.White)
 }
 
 func (g *Game) AddBullet(b *Bullet) {
